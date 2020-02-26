@@ -26,7 +26,7 @@ namespace DatingApp.API.Filters
                     bar.Value = new BaseResponseModel()
                     {
                         Data = bar.Value,
-                        Message = bar.Value?.ToString()
+                        Message = string.Empty
                     };
                 }
             }
@@ -37,9 +37,10 @@ namespace DatingApp.API.Filters
                     or.Value = new BaseResponseModel()
                     {
                         Data = or.Value,
-                        Message = string.Empty
+                        Message = or.Value is ProblemDetails pd ? pd.Title : string.Empty
                     };
                 }
+
 
             }
             return base.OnResultExecutionAsync(context, next);
