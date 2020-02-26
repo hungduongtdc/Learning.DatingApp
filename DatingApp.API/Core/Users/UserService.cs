@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using DatingApp.API.Core.Base;
 using DatingApp.API.Core.Common;
 using DatingApp.API.Core.HashingHelper;
+using DatingApp.API.Core.Users.DTO;
 using DatingApp.API.Data;
+using DatingApp.API.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -31,7 +33,7 @@ namespace DatingApp.API.Core.Users
         }
         public async Task<BaseReturnModel<bool>> Register(UserRegisterInputDTO userInfor)
         {
-            var isExisting = await UserNameIsExisting(userInfor.UserName);
+            var isExisting = await UserNameIsExisting(userInfor.Username);
             if (isExisting)
             {
                 return BaseReturnModel<bool>.CreateFailInstance(false, CommonConstant.ERROR_UserNameIsAlreadyTaken);
@@ -40,7 +42,7 @@ namespace DatingApp.API.Core.Users
             {
                 User newUser = new User()
                 {
-                    UserName = userInfor.UserName
+                    UserName = userInfor.Username
                 };
                 byte[] passWordSalt, passWordHash;
                 _hashingHelper.GeneratePassWordHash(userInfor.Password, out passWordHash, out passWordSalt);
@@ -104,8 +106,10 @@ namespace DatingApp.API.Core.Users
             };
 
         }
-        public async Task<BaseReturnModel<AccessToken>> Login(string userName, string passWord)
+        public async Task<BaseReturnModel<AccessToken>> Login(LoginDTO loginDTO)
         {
+            string userName = loginDTO.Username;
+            string passWord = loginDTO.Password;
             if (!await UserNameIsExisting(userName))
             {
                 return BaseReturnModel<AccessToken>.CreateFailInstance(null, CommonConstant.ERROR_UserNotFound);

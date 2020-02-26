@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DatingApp.API.Controllers.Base;
 using DatingApp.API.Core.HashingHelper;
 using DatingApp.API.Core.Users;
 using DatingApp.API.Data;
+using DatingApp.API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,7 +35,7 @@ namespace DatingApp.API
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(x => x.UseSqlServer(connectionString));
-            services.AddControllers(x => x.Filters.Add(typeof(BaseModelValidationFilter)));
+            services.AddControllers(x => x.Filters.Add(typeof(ResponseFilter)));
             AddDependencies(services);
             services.AddCors();
             string secretKey = Configuration.GetSection("AppSettings:LoginKey").Value;

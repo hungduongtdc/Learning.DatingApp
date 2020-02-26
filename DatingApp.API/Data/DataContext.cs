@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using DatingApp.API.Core.Users;
+using DatingApp.API.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp.API.Data {

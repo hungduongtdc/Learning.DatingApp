@@ -2,6 +2,9 @@ using System;
 using System.Threading.Tasks;
 using DatingApp.API.Core.Common;
 using DatingApp.API.Core.Users;
+using DatingApp.API.Core.Users.DTO;
+using DatingApp.API.Models.RequestModel;
+using DatingApp.API.Models.ResponseModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,23 +22,21 @@ namespace DatingApp.API.Controllers
         }
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<AccessToken>> Login(LoginDTO loginDTO)
+        public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel loginRequestModel)
         {
-            try
+            var token = await _userService.Login(new LoginDTO()
             {
-
-                var token = await _userService.Login(loginDTO.UserName, loginDTO.Password);
-                if (token.IsSuccess)
+                Username = loginRequestModel.Username,
+                Password = loginRequestModel.Password
+            });
+            if (token.IsSuccess)
+            {
+                return new OkObjectResult(new LoginResponseModel()
                 {
-                    return new OkObjectResult(token.Data);
-                }
-                else
-                {
-                    return Unauthorized();
-                }
-
+                    AccessToken = token.Data.Token
+                });
             }
-            catch (Exception ex)
+            else
             {
                 return Unauthorized();
             }
@@ -44,12 +45,12 @@ namespace DatingApp.API.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<ActionResult> Register(CreateUserDTO createUserDTO)
+        public async Task<ActionResult> Register(RegisterRequestModel registerDTO)
         {
             var registerRes = await _userService.Register(new UserRegisterInputDTO()
             {
-                UserName = createUserDTO.UserName,
-                Password = createUserDTO.PassWord
+                Username = registerDTO.Username,
+                Password = registerDTO.Password
             });
             if (registerRes.IsSuccess)
             {

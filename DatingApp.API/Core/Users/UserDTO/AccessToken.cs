@@ -1,4 +1,4 @@
-namespace DatingApp.API.Core.Users
+namespace DatingApp.API.Core.Users.DTO
 {
     public class AccessToken
     {
