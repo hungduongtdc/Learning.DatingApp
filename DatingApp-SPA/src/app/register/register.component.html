@@ -5,6 +5,7 @@
     <input
       name="userName"
       type="text"
+      autocomplete="username"
       class="form-control"
       placeholder="Username"
       [(ngModel)]="registerModel.userName"
@@ -14,8 +15,9 @@
     <input
       type="password"
       class="form-control"
+      autocomplete="new-password"
       placeholder="Password"
-      name="password"
+      name="newpassword"
       [(ngModel)]="registerModel.password"
     />
   </div>

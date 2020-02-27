@@ -26,7 +26,7 @@ namespace DatingApp.API.Filters
                     bar.Value = new BaseResponseModel()
                     {
                         Data = bar.Value,
-                        Message = string.Empty
+                        Message = bar.Value?.ToString()
                     };
                 }
             }
